@@ -18,6 +18,7 @@ import ic2.core.block.base.tile.TileEntityElecMachine;
 import ic2.core.inventory.base.IHasGui;
 import net.minecraft.block.SoundType;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -35,6 +36,7 @@ import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public abstract class TileEntityEngine extends TileEntityElecMachine implements IHasGui, IEngine, ITickable, IMachine{
     public enum Progress {
@@ -85,6 +87,15 @@ public abstract class TileEntityEngine extends TileEntityElecMachine implements 
     }
 
     protected abstract IMjConnector createConnector();
+
+    @Override
+    public void update() {
+        if (this.getWorld().isRemote) {
+            this.updateEntityClient();
+        } else {
+            this.updateEntityServer();
+        }
+    }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
@@ -145,17 +156,17 @@ public abstract class TileEntityEngine extends TileEntityElecMachine implements 
     }
 
 
-    /*protected EnumFacing getPlacementFacing(EntityLivingBase placer, EnumFacing placerFacing) {
-		*//*EnumFacing natural = super.getPlacementFacing(placer, placerFacing).getOpposite();
+    public EnumFacing getPlacementFacing(EntityLivingBase placer, EnumFacing placerFacing) {
+		/*EnumFacing natural = super.getPlacementFacing(placer, placerFacing).getOpposite();
 		if (isFacingMJ(natural)) return natural;
 
 		for (EnumFacing facing : getSupportedFacings().stream().filter(facing -> facing != natural).collect(Collectors.toSet())) {
 			if (isFacingMJ(natural)) return facing;
-		}*//*
+		}*/
 
-        EnumFacing spun = spin(super.getPlacementFacing(placer, placerFacing).getOpposite());
+        EnumFacing spun = spin(super.getFacing().getOpposite());
         return spun != null ? spun : EnumFacing.UP;
-    }*/
+    }
 
     @Override
     public List<String> getNetworkedFields() {
@@ -440,10 +451,6 @@ public abstract class TileEntityEngine extends TileEntityElecMachine implements 
     }
 
 
-    @SideOnly(Side.CLIENT)
-    protected boolean shouldSideBeRendered(EnumFacing side, BlockPos otherPos) {
-        return false;
-    }
 
     @Override
     public boolean canRenderBreaking() {
@@ -454,11 +461,6 @@ public abstract class TileEntityEngine extends TileEntityElecMachine implements 
     @SideOnly(Side.CLIENT)
     public boolean hasFastRenderer() {
         return true;
-    }
-
-    //Not only client side either, but only the client has sounds
-    protected SoundType getBlockSound(Entity entity) {
-        return SoundType.METAL;
     }
 
     @Override
