@@ -13,6 +13,7 @@ import com.chocohead.eumj.util.VeryOrderedEnumMap;
 import ic2.api.classic.item.IMachineUpgradeItem;
 import ic2.api.classic.tile.IMachine;
 import ic2.api.energy.EnergyNet;
+import ic2.api.energy.tile.IEnergyEmitter;
 import ic2.core.IC2;
 import ic2.core.block.base.tile.TileEntityElecMachine;
 import ic2.core.inventory.base.IHasGui;
@@ -120,11 +121,16 @@ public abstract class TileEntityEngine extends TileEntityElecMachine implements 
     }
 
     @Override
+    public boolean acceptsEnergyFrom(IEnergyEmitter emitter, EnumFacing side) {
+        return side == getFacing().getOpposite();
+    }
+
+    @Override
     public boolean isRedstonePowered() {
         return this.redstoneInverted != super.isRedstonePowered();
     }
 
-    private boolean isFacingMJ(EnumFacing dir) {
+    public boolean isFacingMJ(EnumFacing dir) {
         TileEntity neighbour = world.getTileEntity(pos.offset(dir));
         if (neighbour == null) return false;
 
@@ -156,7 +162,7 @@ public abstract class TileEntityEngine extends TileEntityElecMachine implements 
     }
 
 
-    public EnumFacing getPlacementFacing(EntityLivingBase placer, EnumFacing placerFacing) {
+    public EnumFacing getPlacementFacing(EntityLivingBase placer) {
 		/*EnumFacing natural = super.getPlacementFacing(placer, placerFacing).getOpposite();
 		if (isFacingMJ(natural)) return natural;
 
@@ -167,6 +173,8 @@ public abstract class TileEntityEngine extends TileEntityElecMachine implements 
         EnumFacing spun = spin(super.getFacing().getOpposite());
         return spun != null ? spun : EnumFacing.UP;
     }
+
+
 
     @Override
     public List<String> getNetworkedFields() {
