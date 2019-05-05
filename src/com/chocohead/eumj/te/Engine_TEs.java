@@ -2,6 +2,7 @@ package com.chocohead.eumj.te;
 
 import java.util.Set;
 
+import com.chocohead.eumj.tileentity.EngineRender;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.EnumRarity;
@@ -20,7 +21,6 @@ import ic2.core.block.ITeBlock;
 import ic2.core.block.TileEntityBlock;
 import ic2.core.ref.TeBlock.DefaultDrop;
 import ic2.core.ref.TeBlock.HarvestTool;
-import ic2.core.ref.TeBlock.ITePlaceHandler;
 import ic2.core.util.Util;
 
 import com.chocohead.eumj.EngineMod;

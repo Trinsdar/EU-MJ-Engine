@@ -1,4 +1,4 @@
-package com.chocohead.eumj.te;
+package com.chocohead.eumj.tileentity;
 
 import net.minecraft.client.renderer.BufferBuilder;
 

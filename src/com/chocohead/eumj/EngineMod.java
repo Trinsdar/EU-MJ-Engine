@@ -45,7 +45,6 @@ import ic2.core.util.StackUtil;
 
 import com.chocohead.eumj.item.ItemReaderMJ;
 import com.chocohead.eumj.te.Engine_TEs;
-import com.chocohead.eumj.te.TileEntityEngine;
 
 @Mod(modid=MODID, name="EU-MJ Engine", dependencies="required-after:ic2;required-after:buildcraftenergy@[7.99.22, 7.99.24.1];after:buildcrafttransport", version="@VERSION@")
 public final class EngineMod {
