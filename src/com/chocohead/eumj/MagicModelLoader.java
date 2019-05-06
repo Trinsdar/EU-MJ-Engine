@@ -47,7 +47,7 @@ public class MagicModelLoader {
 	static final NodeVariableObject<EnumFacing> ENGINE_FACING = fnCtx.putVariableObject("direction", EnumFacing.class);
 
 	public enum Engine {
-		SLOW_ELECTRIC_ENGINE, REGULAR_ELECTRIC_ENGINE, FAST_ELECTRIC_ENGINE, QUICK_ELECTRIC_ENGINE, ADJUSTABLE_ELECTRIC_ENGINE;
+		SLOW_ELECTRIC_ENGINE, REGULAR_ELECTRIC_ENGINE, FAST_ELECTRIC_ENGINE, ADJUSTABLE_ELECTRIC_ENGINE;
 
 		private final ModelHolderVariable model;
 		private final ModelResourceLocation item;

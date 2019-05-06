@@ -1,14 +1,5 @@
 package com.chocohead.eumj;
 
-import java.util.Collections;
-
-import com.chocohead.eumj.te.Engine_TEs;
-
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import buildcraft.lib.client.guide.GuideManager;
 import buildcraft.lib.client.guide.PageLine;
 import buildcraft.lib.client.guide.loader.XmlPageLoader;
@@ -16,8 +7,12 @@ import buildcraft.lib.client.guide.parts.GuideText;
 import buildcraft.lib.client.guide.ref.GuideGroupManager;
 import buildcraft.lib.gui.GuiStack;
 import buildcraft.lib.gui.ISimpleDrawable;
+import com.chocohead.eumj.util.Registry;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-import ic2.core.util.StackUtil;
+import java.util.Collections;
 
 class GuideThings {
 	@SideOnly(Side.CLIENT)
@@ -32,7 +27,7 @@ class GuideThings {
 			ItemStack stack = XmlPageLoader.loadItemStack(tag);
 
 			PageLine line;
-			if (StackUtil.isEmpty(stack)) {
+			if (stack.isEmpty()) {
 				line = new PageLine(1, "Missing item: "+tag, false);
 			} else {
 				ISimpleDrawable icon = new GuiStack(stack);
@@ -52,11 +47,10 @@ class GuideThings {
 		});
 
 		Object[] engines = {
-			EngineMod.engine.getItemStack(Engine_TEs.slow_electric_engine),
-			EngineMod.engine.getItemStack(Engine_TEs.regular_electric_engine),
-			EngineMod.engine.getItemStack(Engine_TEs.fast_electric_engine),
-			EngineMod.engine.getItemStack(Engine_TEs.quick_electric_engine),
-			EngineMod.engine.getItemStack(Engine_TEs.adjustable_electric_engine),
+			new ItemStack(Registry.slowElectricEngine),
+			new ItemStack(Registry.regularElectricEngine),
+			new ItemStack(Registry.fastElectricEngine),
+			new ItemStack(Registry.adjustableElectricEngine),
 		};
         GuideGroupManager.addEntries("buildcraft", "pipe_power_providers", engines);
         GuideGroupManager.addEntries("buildcraft", "full_power_providers", engines);

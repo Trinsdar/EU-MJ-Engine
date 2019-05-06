@@ -48,9 +48,6 @@ public class BlockEngine extends BlockCommonContainer {
         return false;
     }
 
-    /**
-     * @return true if the state occupies all of its 1x1x1 cube
-     */
     @Override
     public boolean isFullBlock(IBlockState state) {
         return false;
@@ -109,7 +106,7 @@ public class BlockEngine extends BlockCommonContainer {
         if (placer == null){
             return EnumFacing.UP;
         }
-        return !engine.isFacingMJ(placer.getHorizontalFacing()) ? EnumFacing.UP : EnumFacing.fromAngle((double)placer.rotationYaw);
+        return engine.isFacingMJ(placer.getHorizontalFacing()) ? EnumFacing.fromAngle((double)placer.rotationYaw) : EnumFacing.UP;
     }
 
     @Nullable

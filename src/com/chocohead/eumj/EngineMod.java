@@ -7,6 +7,12 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 
+import com.chocohead.eumj.tileentity.TileEntityEngine;
+import com.chocohead.eumj.util.Registry;
+import ic2.api.classic.recipe.ClassicRecipes;
+import ic2.api.item.ElectricItem;
+import ic2.core.platform.registry.Ic2Items;
+import ic2.core.util.misc.StackUtil;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -49,6 +55,7 @@ import com.chocohead.eumj.te.Engine_TEs;
 @Mod(modid=MODID, name="EU-MJ Engine", dependencies="required-after:ic2;required-after:buildcraftenergy@[7.99.22, 7.99.24.1];after:buildcrafttransport", version="@VERSION@")
 public final class EngineMod {
 	public static final String MODID = "eu-mj_engine";
+
 	public static final CreativeTabs TAB = new CreativeTabs("EU-MJ Engine") {
 		private ItemStack[] items;
 		private int ticker;
@@ -61,11 +68,12 @@ public final class EngineMod {
 			}
 
 			if (items == null) {
-				items = new ItemStack[5];
+				items = new ItemStack[4];
 
-				for (int i = 0; i < Engine_TEs.VALUES.length; i++) {
-					items[i] = engine.getItemStack(Engine_TEs.VALUES[i]);
-				}
+				items[0] = new ItemStack(Registry.slowElectricEngine);
+				items[1] = new ItemStack(Registry.regularElectricEngine);
+				items[2] = new ItemStack(Registry.fastElectricEngine);
+				items[3] = new ItemStack(Registry.adjustableElectricEngine);
 			}
 
 			assert ticker / 100 < items.length;
@@ -85,37 +93,22 @@ public final class EngineMod {
 		}
 	};
 
-	public static BlockTileEntity engine;
-	public static ItemIC2 readerMJ;
 
 	@EventHandler
 	public void construction(FMLConstructionEvent event) {
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 
-	@SubscribeEvent
-	public void register(TeBlockFinalCallEvent event) {
-		TeBlockRegistry.addAll(Engine_TEs.class, Engine_TEs.IDENTITY);
-		TeBlockRegistry.addCreativeRegisterer((list, block, item, tab) -> {
-			if (tab == TAB || tab == CreativeTabs.SEARCH) Arrays.stream(Engine_TEs.VALUES).filter(Engine_TEs::hasItem).forEach(type -> list.add(block.getItemStack(type)));
-		}, Engine_TEs.IDENTITY);
-	}
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		loadConfig(event.getSuggestedConfigurationFile());
 		event.getModLog().info("Running with "+Conversion.MJperEU / MjAPI.MJ+" MJ per EU or "+MjAPI.MJ / Conversion.MJperEU+" EU per MJ");
+		Registry.init();
 
-		//Blocks
-		engine = TeBlockRegistry.get(Engine_TEs.IDENTITY);
-		engine.setCreativeTab(TAB);
-		//Items
-		if (BCModules.TRANSPORT.isLoaded()) {
-			readerMJ = new ItemReaderMJ();
-		}
 
 		if (event.getSide().isClient()) {
-			if (readerMJ != null) readerMJ.registerModels(null);
+			Registry.mjReader.registerModel();
 		}
 	}
 
@@ -140,33 +133,27 @@ public final class EngineMod {
 		Engine_TEs.buildDummies(event.getSide().isClient());
 
 		if (Core.ENGINE != null) {
-			Recipes.advRecipes.addRecipe(engine.getItemStack(Engine_TEs.slow_electric_engine),
+			ClassicRecipes.advCrafting.addRecipe(new ItemStack(Registry.slowElectricEngine),
 					"B", "E", "C",
-					'B', anyCharge(IC2Items.getItem("re_battery")),
+					'B', anyCharge(Ic2Items.battery),
 					'E', new ItemStack(Core.ENGINE, 1, EnumEngineType.STONE.ordinal()),
-					'C', IC2Items.getItem("crafting", "circuit"));
+					'C', Ic2Items.electricCircuit);
 
-			Recipes.advRecipes.addRecipe(engine.getItemStack(Engine_TEs.regular_electric_engine),
-					"B", "E", "C",
-					'B', anyCharge(IC2Items.getItem("re_battery")),
-					'E', new ItemStack(Core.ENGINE, 1, EnumEngineType.IRON.ordinal()),
-					'C', IC2Items.getItem("crafting", "circuit"));
-
-			Recipes.advRecipes.addRecipe(engine.getItemStack(Engine_TEs.fast_electric_engine),
+			ClassicRecipes.advCrafting.addRecipe(new ItemStack(Registry.regularElectricEngine),
 					"BBB", "EPE", "CPC",
-					'B', anyCharge(IC2Items.getItem("advanced_re_battery")),
+					'B', anyCharge(Ic2Items.battery),
 					'E', new ItemStack(Core.ENGINE, 1, EnumEngineType.IRON.ordinal()),
 					'P', IC2Items.getItem("crafting", "alloy"),
 					'C', IC2Items.getItem("crafting", "circuit"));
 
-			Recipes.advRecipes.addRecipe(engine.getItemStack(Engine_TEs.quick_electric_engine),
+			ClassicRecipes.advCrafting.addRecipe(new ItemStack(Registry.fastElectricEngine),
 					"BPB", "EEE", "CPC",
 					'B', anyCharge(IC2Items.getItem("energy_crystal")),
 					'E', new ItemStack(Core.ENGINE, 1, EnumEngineType.IRON.ordinal()),
 					'P', IC2Items.getItem("crafting", "alloy"),
 					'C', IC2Items.getItem("crafting", "advanced_circuit"));
 
-			Recipes.advRecipes.addRecipe(engine.getItemStack(Engine_TEs.adjustable_electric_engine),
+			ClassicRecipes.advCrafting.addRecipe(new ItemStack(Registry.adjustableElectricEngine),
 					"BCB", "EEE", "MTM",
 					'B', anyCharge(IC2Items.getItem("lapotron_crystal")),
 					'E', new ItemStack(Core.ENGINE, 1, EnumEngineType.IRON.ordinal()),
@@ -175,7 +162,7 @@ public final class EngineMod {
 					'T', IC2Items.getItem("te", "hv_transformer"));
 		}
 
-		if (readerMJ != null && BCItems.Core.GEAR_GOLD != null && BCTransportItems.pipePowerWood != null) {
+		if (Registry.mjReader != null && BCItems.Core.GEAR_GOLD != null && BCTransportItems.pipePowerWood != null) {
 			Collection<ItemStack> pipes = new HashSet<>();
 
 			for (Item pipe : new Item[] {BCTransportItems.pipePowerCobble, BCTransportItems.pipePowerStone,
@@ -186,7 +173,7 @@ public final class EngineMod {
 			}
 
 			if (!pipes.isEmpty()) {
-				Recipes.advRecipes.addRecipe(new ItemStack(readerMJ),
+				ClassicRecipes.advCrafting.addRecipe(new ItemStack(Registry.mjReader),
 						" D ", "PGP", "p p",
 						'D', Items.GLOWSTONE_DUST,
 						'G', BCItems.Core.GEAR_GOLD,

@@ -1,55 +1,42 @@
 package com.chocohead.eumj.item;
 
-import java.util.EnumMap;
-import java.util.Map;
-
+import buildcraft.api.mj.IMjConnector;
+import buildcraft.api.mj.MjAPI;
+import buildcraft.transport.pipe.flow.PipeFlowPower.Section;
+import com.chocohead.eumj.EngineMod;
+import ic2.core.item.tool.electric.ItemElectricReader;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import buildcraft.api.mj.IMjConnector;
-import buildcraft.api.mj.MjAPI;
-import buildcraft.transport.pipe.flow.PipeFlowPower.Section;
+import java.util.EnumMap;
+import java.util.Map;
 
-import ic2.api.item.IBoxable;
-
-import ic2.core.IC2;
-import ic2.core.IHasGui;
-import ic2.core.init.BlocksItems;
-import ic2.core.item.IHandHeldInventory;
-import ic2.core.item.ItemIC2;
-import ic2.core.ref.ItemName;
-import ic2.core.util.StackUtil;
-
-import com.chocohead.eumj.EngineMod;
-
-public class ItemReaderMJ extends ItemIC2 implements IHandHeldInventory, IBoxable {
+public class ItemReaderMJ extends Item {
 	private static final String NAME = "mj_reader";
 
 	public ItemReaderMJ() {
-		super(null);
+		super();
 
-		BlocksItems.registerItem(this, new ResourceLocation(EngineMod.MODID, NAME)).setUnlocalizedName(NAME).setCreativeTab(EngineMod.TAB);
-
+		setUnlocalizedName(NAME);
 		maxStackSize = 1;
 		setMaxDamage(0);
 	}
 
-	@Override
+
 	@SideOnly(Side.CLIENT)
-	protected void registerModel(int meta, ItemName name, String extraName) {
-		ModelLoader.setCustomModelResourceLocation(this, meta, new ModelResourceLocation(EngineMod.MODID+':'+NAME, null));
+	public void registerModel() {
+		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(EngineMod.MODID+':'+NAME, "inventory"));
 	}
 
 	@Override
@@ -79,19 +66,11 @@ public class ItemReaderMJ extends ItemIC2 implements IHandHeldInventory, IBoxabl
 		}
 		if (caps.isEmpty()) return EnumActionResult.FAIL;
 
-		if (IC2.platform.launchGui(player, new HandHeldReaderMJ(player, StackUtil.get(player, hand), pos, caps)))
-			//caps.forEach((facing, section) -> System.out.println(facing + ": " + section.powerAverage.getAverage()));
-			return EnumActionResult.SUCCESS;
 
 		return EnumActionResult.PASS;
 	}
 
-	@Override
-	public IHasGui getInventory(EntityPlayer player, ItemStack stack) {
-		return new HandHeldReaderMJ(player, stack);
-	}
 
-	@Override
 	public boolean canBeStoredInToolbox(ItemStack stack) {
 		return true;
 	}
