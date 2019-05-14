@@ -21,4 +21,12 @@ public class Registry {
         IC2.getInstance().createBlock(regularElectricEngine, ItemBlockEngine.class);
         IC2.getInstance().createBlock(slowElectricEngine, ItemBlockEngine.class);
     }
+
+    public static void initModels(){
+        slowElectricEngine.initModel();
+        regularElectricEngine.initModel();
+        fastElectricEngine.initModel();
+        adjustableElectricEngine.initModel();
+        mjReader.registerModel();
+    }
 }

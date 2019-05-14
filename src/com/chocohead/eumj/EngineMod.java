@@ -38,11 +38,6 @@ import buildcraft.transport.BCTransportItems;
 
 import ic2.api.item.IC2Items;
 
-import ic2.core.block.BlockTileEntity;
-import ic2.core.block.TeBlockRegistry;
-import ic2.core.item.ItemIC2;
-import ic2.core.util.StackUtil;
-
 @Mod(modid=MODID, name="EU-MJ Engine", dependencies="required-after:ic2;required-after:buildcraftenergy@[7.99.22, 7.99.24.1];after:buildcrafttransport", version="@VERSION@")
 public final class EngineMod {
 	public static final String MODID = "eu-mj_engine";
@@ -99,7 +94,7 @@ public final class EngineMod {
 
 
 		if (event.getSide().isClient()) {
-			Registry.mjReader.registerModel();
+			Registry.initModels();
 		}
 	}
 
@@ -185,11 +180,11 @@ public final class EngineMod {
 
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
-		CustomRotationHelper.INSTANCE.registerHandler(engine, (world, pos, state, side) -> {
-			TileEntity te = world.getTileEntity(pos);
-
-			return te instanceof TileEntityEngine && ((TileEntityEngine) te).trySpin(side.getOpposite()) ? EnumActionResult.SUCCESS : EnumActionResult.FAIL;
-		});
+//		CustomRotationHelper.INSTANCE.registerHandler(engine, (world, pos, state, side) -> {
+//			TileEntity te = world.getTileEntity(pos);
+//
+//			return te instanceof TileEntityEngine && ((TileEntityEngine) te).trySpin(side.getOpposite()) ? EnumActionResult.SUCCESS : EnumActionResult.FAIL;
+//		});
 	}
 
 
