@@ -3,14 +3,12 @@ package com.chocohead.eumj;
 import static com.chocohead.eumj.EngineMod.MODID;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 
 import com.chocohead.eumj.tileentity.TileEntityEngine;
 import com.chocohead.eumj.util.Registry;
 import ic2.api.classic.recipe.ClassicRecipes;
-import ic2.api.item.ElectricItem;
 import ic2.core.platform.registry.Ic2Items;
 import ic2.core.util.misc.StackUtil;
 import net.minecraft.creativetab.CreativeTabs;
@@ -28,29 +26,22 @@ import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import buildcraft.api.BCBlocks.Core;
 import buildcraft.api.BCItems;
-import buildcraft.api.BCModules;
 import buildcraft.api.blocks.CustomRotationHelper;
 import buildcraft.api.enums.EnumEngineType;
 import buildcraft.api.mj.MjAPI;
 import buildcraft.transport.BCTransportItems;
 
-import ic2.api.event.TeBlockFinalCallEvent;
 import ic2.api.item.IC2Items;
-import ic2.api.recipe.Recipes;
 
 import ic2.core.block.BlockTileEntity;
 import ic2.core.block.TeBlockRegistry;
 import ic2.core.item.ItemIC2;
 import ic2.core.util.StackUtil;
-
-import com.chocohead.eumj.item.ItemReaderMJ;
-import com.chocohead.eumj.te.Engine_TEs;
 
 @Mod(modid=MODID, name="EU-MJ Engine", dependencies="required-after:ic2;required-after:buildcraftenergy@[7.99.22, 7.99.24.1];after:buildcrafttransport", version="@VERSION@")
 public final class EngineMod {
@@ -130,7 +121,6 @@ public final class EngineMod {
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
-		Engine_TEs.buildDummies(event.getSide().isClient());
 
 		if (Core.ENGINE != null) {
 			ClassicRecipes.advCrafting.addRecipe(new ItemStack(Registry.slowElectricEngine),

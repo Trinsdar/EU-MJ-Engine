@@ -1,25 +1,15 @@
 package com.chocohead.eumj.tileentity;
 
 import buildcraft.api.mj.MjAPI;
-import buildcraft.lib.gui.IGuiElement;
-import buildcraft.lib.gui.help.DummyHelpElement;
-import buildcraft.lib.gui.help.ElementHelpInfo;
-import buildcraft.lib.gui.pos.GuiRectangle;
-import buildcraft.lib.gui.pos.IGuiArea;
 import com.chocohead.eumj.EngineMod;
-import com.chocohead.eumj.gui.DynamicBridgeGUI;
-import com.chocohead.eumj.gui.TransparentDynamicBridgeGUI;
-import ic2.api.network.INetworkClientTileEntityEventListener;
+import com.chocohead.eumj.container.ContainerAdjustableElectricEngine;
 import ic2.core.IC2;
 import ic2.core.inventory.container.ContainerIC2;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.util.ResourceLocation;
 
-import java.lang.reflect.Field;
 import java.util.List;
-import java.util.function.Consumer;
 
 public class TileEntityAdjustableElectricEngine extends TileEntityElectricEngine {
 
@@ -110,8 +100,13 @@ public class TileEntityAdjustableElectricEngine extends TileEntityElectricEngine
     }
 
     @Override
-    public ContainerIC2 getGuiContainer(EntityPlayer entityPlayer) {
-        return null;
+    public ContainerIC2 getGuiContainer(EntityPlayer player) {
+        return new ContainerAdjustableElectricEngine(player.inventory, this);
+    }
+
+    @Override
+    public ResourceLocation getGuiTexture(){
+        return new ResourceLocation(EngineMod.MODID, "textures/gui/gui_adjustable_electric_engine.png");
     }
 
 //    @SideOnly(Side.CLIENT)

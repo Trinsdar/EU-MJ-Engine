@@ -19,9 +19,4 @@ public class TileEntityFastElectricEngine extends TileEntityElectricEngine {
     protected long getOutput() {
         return 10 * MjAPI.MJ;
     }
-
-    @Override
-    public ContainerIC2 getGuiContainer(EntityPlayer entityPlayer) {
-        return null;
-    }
 }

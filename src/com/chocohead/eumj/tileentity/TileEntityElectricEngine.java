@@ -5,11 +5,14 @@ import buildcraft.api.mj.IMjConnector;
 import buildcraft.api.mj.MjAPI;
 import buildcraft.lib.engine.EngineConnector;
 import com.chocohead.eumj.EngineMod;
+import com.chocohead.eumj.container.ContainerAdjustableElectricEngine;
+import com.chocohead.eumj.container.ContainerElectricEngine;
 import ic2.api.classic.item.IMachineUpgradeItem;
 import ic2.core.inventory.container.ContainerIC2;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -129,7 +132,16 @@ public abstract class TileEntityElectricEngine extends TileEntityEngine{
 
 
     @Override
+    public ContainerIC2 getGuiContainer(EntityPlayer player) {
+        return new ContainerElectricEngine(player.inventory, this);
+    }
+
+    @Override
     public Class<? extends GuiScreen> getGuiClass(EntityPlayer entityPlayer) {
         return null;
+    }
+
+    public ResourceLocation getGuiTexture(){
+        return new ResourceLocation(EngineMod.MODID, "textures/gui/gui_electric_engine.png");
     }
 }

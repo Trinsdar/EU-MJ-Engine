@@ -4,7 +4,12 @@ import buildcraft.api.mj.IMjConnector;
 import buildcraft.api.mj.MjAPI;
 import buildcraft.lib.block.VanillaRotationHandlers;
 import com.chocohead.eumj.EngineMod;
+import com.chocohead.eumj.tileentity.TileEntityAdjustableElectricEngine;
 import com.chocohead.eumj.tileentity.TileEntityEngine;
+import com.chocohead.eumj.tileentity.TileEntityFastElectricEngine;
+import com.chocohead.eumj.tileentity.TileEntityRegularElectricEngine;
+import com.chocohead.eumj.tileentity.TileEntitySlowElectricEngine;
+import com.chocohead.eumj.util.Registry;
 import com.chocohead.eumj.util.VeryOrderedEnumMap;
 import ic2.core.IC2;
 import ic2.core.block.base.BlockCommonContainer;
@@ -112,6 +117,16 @@ public class BlockEngine extends BlockCommonContainer {
     @Nullable
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return null;
+        if (this == Registry.slowElectricEngine){
+            return new TileEntitySlowElectricEngine();
+        }else if (this == Registry.regularElectricEngine){
+            return new TileEntityRegularElectricEngine();
+        }else if (this == Registry.fastElectricEngine){
+            return new TileEntityFastElectricEngine();
+        }else if (this == Registry.adjustableElectricEngine){
+            return new TileEntityAdjustableElectricEngine();
+        }else {
+            return new TileEntityBlock();
+        }
     }
 }
