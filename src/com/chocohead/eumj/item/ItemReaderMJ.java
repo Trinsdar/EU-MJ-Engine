@@ -31,6 +31,7 @@ public class ItemReaderMJ extends Item {
 		setUnlocalizedName(NAME);
 		maxStackSize = 1;
 		setMaxDamage(0);
+		setCreativeTab(EngineMod.TAB);
 	}
 
 

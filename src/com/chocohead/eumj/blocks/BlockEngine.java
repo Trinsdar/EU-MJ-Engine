@@ -14,11 +14,16 @@ import com.chocohead.eumj.util.VeryOrderedEnumMap;
 import ic2.core.IC2;
 import ic2.core.block.base.BlockCommonContainer;
 import ic2.core.block.base.tile.TileEntityBlock;
+import ic2.core.util.helpers.BlockStateContainerIC2;
+import ic2.core.util.obj.IBlockStateLoader;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockFaceShape;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.EntityLivingBase;
@@ -34,8 +39,13 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-public class BlockEngine extends BlockCommonContainer {
+public class BlockEngine extends BlockCommonContainer implements IBlockStateLoader {
+    public static PropertyDirection allFacings;
+    public static PropertyBool active;
     public BlockEngine(String name) {
         super(Material.IRON);
         this.setHardness(4.0F);
@@ -90,9 +100,32 @@ public class BlockEngine extends BlockCommonContainer {
         return false;
     }
 
+    public boolean hasFacing() {
+        return true;
+    }
+
     @Override
     public IBlockState getDefaultBlockState() {
-        return null;
+        IBlockState state = getDefaultState().withProperty(active, false);
+        if (hasFacing()) {
+            state = state.withProperty(allFacings, EnumFacing.UP);
+        }
+        return state;
+    }
+
+    @Override
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainerIC2(this, allFacings, active);
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        return 0;
+    }
+
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return getDefaultState();
     }
 
     @Override
@@ -139,5 +172,22 @@ public class BlockEngine extends BlockCommonContainer {
                 Item.getItemFromBlock(this), 0,
                 new ModelResourceLocation(getRegistryName(), "inventory")
         );
+    }
+
+    @Override
+    public List<IBlockState> getValidStates(IBlockState iBlockState) {
+        this.setDefaultState(iBlockState);
+        this.setDefaultState(this.getDefaultBlockState());
+        return this.getValidStateList();
+    }
+
+    public List<IBlockState> getValidStateList() {
+        IBlockState def = getDefaultState();
+        List<IBlockState> states = new ArrayList<>();
+        for (EnumFacing side : EnumFacing.VALUES) {
+            states.add(def.withProperty(allFacings, side).withProperty(active, false));
+            states.add(def.withProperty(allFacings, side).withProperty(active, true));
+        }
+        return states;
     }
 }

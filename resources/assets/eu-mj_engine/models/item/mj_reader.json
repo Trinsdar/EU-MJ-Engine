@@ -1,5 +1,5 @@
 {
-	"parent": "ic2:item/default",
+	"parent": "item/generated",
 	"textures": {
 		"layer0": "eu-mj_engine:item/mj-reader"
 	}
