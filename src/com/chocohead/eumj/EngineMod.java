@@ -49,21 +49,21 @@ public final class EngineMod {
 		@Override
 		@SideOnly(Side.CLIENT)
 		public ItemStack getIconItemStack() {
-			if (++ticker >= 500) {
-				ticker = 0;
-			}
-
-			if (items == null) {
-				items = new ItemStack[4];
-
-				items[0] = new ItemStack(Registry.slowElectricEngine);
-				items[1] = new ItemStack(Registry.regularElectricEngine);
-				items[2] = new ItemStack(Registry.fastElectricEngine);
-				items[3] = new ItemStack(Registry.adjustableElectricEngine);
-			}
-
-			assert ticker / 100 < items.length;
-			return items[ticker / 100];
+//			if (++ticker >= 500) {
+//				ticker = 0;
+//			}
+//
+//			if (items == null) {
+//				items = new ItemStack[4];
+//
+//				items[0] = new ItemStack(Registry.slowElectricEngine);
+//				items[1] = new ItemStack(Registry.regularElectricEngine);
+//				items[2] = new ItemStack(Registry.fastElectricEngine);
+//				items[3] = new ItemStack(Registry.adjustableElectricEngine);
+//			}
+//
+//			assert ticker / 100 < items.length;
+			return new ItemStack(Registry.slowElectricEngine);
 		}
 
 		@Override
